@@ -3,9 +3,10 @@ import React,{useState} from 'react';
 
 const Statistic=({text,value})=>{
   return (
-    <div>
-      {text} {value}
-    </div>
+    <>
+     <td>{text}</td>
+     <td>{value}</td>
+    </>
   )
 }
 const Statistics=({good,neutral,bad})=>{
@@ -24,14 +25,29 @@ const Statistics=({good,neutral,bad})=>{
     )
   }
   return (
-    <div>
-     <Statistic text='good' value={good} />
-     <Statistic text='neutral' value={neutral} />
-     <Statistic text='bad' value={bad} />
-     <Statistic text='all' value={total} />
-     <Statistic text='average' value={average} />
-     <Statistic text='positive' value={positive} />
-    </div>
+    
+    <table>
+      <tbody>
+      <tr>
+      <Statistic text='good' value={good} />
+      </tr>
+      <tr>
+      <Statistic text='neutral' value={neutral} />
+      </tr>
+      <tr>
+      <Statistic text='bad' value={bad} />
+      </tr>
+      <tr>
+      <Statistic text='all' value={total} />
+      </tr>
+      <tr>
+      <Statistic text='average' value={average} />
+      </tr>
+      <tr>
+      <Statistic text='positive' value={positive} />
+      </tr>
+      </tbody>
+    </table>
   )
 }
 
