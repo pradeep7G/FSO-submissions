@@ -23,9 +23,11 @@ const Content=({parts})=>{
   )
 }
 const Total=({parts})=>{
+
+  const total=parts.reduce((acc,cur)=> acc + cur.exercises,0);
   return (
     <>
-      <p><b>Total of {parts.reduce((acc,cur)=> acc + cur.exercises,0)} exercises </b></p>
+      <p><b>Total of {total} exercises</b></p>
     </>
   )
 }
