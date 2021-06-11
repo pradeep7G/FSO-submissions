@@ -43,17 +43,9 @@ const App = () => {
   const vote=()=>{
     const newObj={...votes};
     newObj[selected]+=1;
-    for(let j=0;j<anecdotes.length;j++)
-    {
-      if(Max < newObj[j])
-      {
-        Max=newObj[j];
-        key=j;
-      }
-    }
     setVotes(newObj);
   }
-
+  
    for(let j=0;j<anecdotes.length;j++)
     {
       if(Max < votes[j])
