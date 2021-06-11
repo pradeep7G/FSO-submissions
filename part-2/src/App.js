@@ -1,12 +1,44 @@
 import React,{useState} from 'react';
 
+const DisplayPerson=({name,number})=>{
+  return (
+     <div>{name}  {number}</div>
+  )
+}
+
+const Search=({search,person})=>{
+  let ar=[];
+  person.forEach((p)=>{
+    if(p.name.toUpperCase().search(search.toUpperCase())!==-1)
+    {
+      ar.push(p);
+    }
+  })
+  console.log(ar);
+  return (
+    <div>
+    {
+      ar.map((p)=>{
+        return (
+        <div key={p.name}>{p.name} {p.number}</div>
+        )
+      })
+    }
+    </div>
+  )
+}
+
 const App=()=>{
   const [person,setPerson]=useState([
-    {name:'Pradeep P',number:"7989266"},
+    { name: 'Arto Hellas', number: '040-123456' },
+    { name: 'Ada Lovelace', number: '39-44-5323523' },
+    { name: 'Dan Abramov', number: '12-43-234345' },
+    { name: 'Mary Poppendieck', number: '39-23-6423122' }
   ])
   
   const [newName,setNewName]=useState('');
   const [newNumber,setNewNumber]=useState('');
+  const [search,setSearch]=useState('');
 
   const addPerson=(event)=>{
     event.preventDefault();
@@ -41,9 +73,18 @@ const App=()=>{
     const newPNumber=event.target.value;
       setNewNumber(newPNumber);
   }
+
+  const handleSearch=(event)=>{
+    const newSearch=event.target.value;
+    setSearch(newSearch);
+  }
+  
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+        <div>filter shown with : <input value={search} onChange={handleSearch} /></div>
+        <Search search={search} person={person} />
+      <h2>Add a new </h2>
       <form onSubmit={addPerson}>
         <div>
           name:<input value={newName} onChange={handleOnChange}/>
@@ -57,7 +98,7 @@ const App=()=>{
       </form>
       <h2>Numbers</h2>
       <div>
-      {person.map((personn)=><div key={personn.name}>{personn.name} - {personn.number}</div>)}
+      {person.map((personn)=> <DisplayPerson key={personn.name} name={personn.name} number={personn.number} />)}
       </div>
     </div>
   )
