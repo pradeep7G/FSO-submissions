@@ -1,13 +1,15 @@
 
 import React,{useState} from 'react';
-const Statistics=({good,neutral,bad})=>
-{
+const Statistics=({good,neutral,bad})=>{
   return (
     <div>
       <h2>statistics</h2>
       good {good} <br/>
       neutral {neutral} <br/>
       bad {bad} <br/>
+      all {good + neutral + bad} <br/>
+      average {(good - bad)/(good + neutral + bad)} <br/>
+      positive {(good)*100/(good + neutral + bad)} %<br/>
     </div>
   )
 }
