@@ -10,13 +10,17 @@ const App=()=>{
   const addName=(event)=>{
     event.preventDefault();
     const newObj={name:newName};
-    // console.log(newObj);
     setPerson(person.concat(newObj));
     setNewName('');
   }
 
   const handleOnChange=(event)=>{
       const newPerson=event.target.value;
+       const found=person.find(element => element.name === newPerson);
+       if(found && found.name===newPerson)
+       {
+         alert(`${newPerson} is already added to phonebook`)
+       }
       setNewName(newPerson);
   }
 
