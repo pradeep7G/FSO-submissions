@@ -40,9 +40,21 @@ const Search=({search,person})=>{
 
   return (
     <div>
-    {ar.map((p)=> <Show key={p.id} P={p} /> )}
+    {ar.map((p)=> <div key={p.id}> {p.id} {p.name} {p.number} </div> )}
     </div>
   )
+}
+
+const Notification=({message,color})=>{
+    if(message===null)
+    {
+      return null
+    }
+    return (
+      <div className="error" style={{color:color}}>
+        {message}
+      </div>
+    )
 }
 
 const App=()=>{
@@ -50,7 +62,8 @@ const App=()=>{
   const [newName,setNewName]=useState('');
   const [newNumber,setNewNumber]=useState('');
   const [search,setSearch]=useState('');
-
+  const [message,setMessage]=useState(null);
+  const [color,setColor]=useState('green');
   useEffect(()=>{
     phonebook.getAll().then(initialNumbers=>
       setPerson(initialNumbers)
@@ -63,14 +76,19 @@ const App=()=>{
      let found=person.find(element => element.name === newName);
        if(found && found.name===newName)
        {
-          // alert(`${newName} is already added to phonebook`)
           if(window.confirm(`${newName} is already added to phonebook,replace the old number with new one?`))
           {
             phonebook.update(found.id,newObj)
             .then(returnedPerson=>{
               setPerson(person.map((p)=>{
                 return p.id!==found.id ? p : returnedPerson;
-              }))
+              })
+              );
+              setMessage(`updated ${returnedPerson.name}`);
+                setColor('green');
+                setTimeout(()=>{
+                  setMessage(null);
+                },5000)
             })
           }
        }
@@ -84,9 +102,14 @@ const App=()=>{
           else
           {
               phonebook.create(newObj)
-              .then(returnedPerson=>
-                setPerson(person.concat(returnedPerson))
-                )
+              .then(returnedPerson=>{
+                setPerson(person.concat(returnedPerson));
+                setMessage(`Added ${returnedPerson.name}`);
+                setColor('green');
+                setTimeout(()=>{
+                  setMessage(null);
+                },5000)
+              })
           }
       }
   }
@@ -123,7 +146,8 @@ const App=()=>{
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      <Notification message={message} color={color}/>
       <Filter search={search} handleSearch={handleSearch} person={person} />
       <h3>Add a new </h3>
       <PersonForm 
