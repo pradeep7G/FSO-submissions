@@ -1,5 +1,6 @@
 import React,{useState,useEffect} from 'react';
-import axios from 'axios';
+import phonebook from './services/Person';
+
 const DisplayPerson=({person})=>{
   return (
      <div>{person.id} {person.name}  {person.number}</div>
@@ -56,10 +57,9 @@ const App=()=>{
   const [search,setSearch]=useState('');
 
   useEffect(()=>{
-    // console.log('effect');  
-    axios.get('http://localhost:3001/persons').then((response)=>{
-      setPerson(response.data);
-    })
+    phonebook.getAll().then(initialNumbers=>
+      setPerson(initialNumbers)
+      )
   },[]);
 
   const addPerson=(event)=>{
@@ -79,13 +79,10 @@ const App=()=>{
           }
           else
           {
-              axios.post('http://localhost:3001/persons',newObj)
-              .then((response)=>{
-                // console.log(response);
-                setPerson(person.concat(response.data));
-                setNewName('');
-                setNewNumber('');
-              })
+              phonebook.create(newObj)
+              .then(returnedPerson=>
+                setPerson(person.concat(returnedPerson))
+                )
           }
       }
   }
