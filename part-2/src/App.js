@@ -90,6 +90,13 @@ const App=()=>{
                   setMessage(null);
                 },5000)
             })
+             .catch(error => {
+                setMessage(`Information of ${found.name} has already been deleted from server`);
+                setColor('red');
+                setTimeout(()=>{
+                  setMessage(null);
+                },6100)
+            })
           }
        }
        else
@@ -140,6 +147,11 @@ const App=()=>{
           newPersons.push(p);
         })
         setPerson(newPersons);
+        setMessage(`Deleted ${personn.name}`);
+                setColor('red');
+                setTimeout(()=>{
+                  setMessage(null);
+                },5000)
       })
     }
   }
