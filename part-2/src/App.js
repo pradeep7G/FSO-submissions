@@ -58,14 +58,13 @@ const App=()=>{
   useEffect(()=>{
     // console.log('effect');  
     axios.get('http://localhost:3001/persons').then((response)=>{
-      // console.log(response);
       setPerson(response.data);
     })
   },[]);
 
   const addPerson=(event)=>{
     event.preventDefault();
-    const newObj={name:newName,number:newNumber,id:person.length+1};
+    const newObj={name:newName,number:newNumber};
      let found=person.find(element => element.name === newName);
        if(found && found.name===newName)
        {
@@ -80,9 +79,13 @@ const App=()=>{
           }
           else
           {
-              setPerson(person.concat(newObj));
-              setNewName('');
-              setNewNumber('');
+              axios.post('http://localhost:3001/persons',newObj)
+              .then((response)=>{
+                // console.log(response);
+                setPerson(person.concat(response.data));
+                setNewName('');
+                setNewNumber('');
+              })
           }
       }
   }
