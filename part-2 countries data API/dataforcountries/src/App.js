@@ -1,9 +1,32 @@
 import React,{useState,useEffect} from 'react';
 import axios from 'axios';
 
+const Showcountry=({country})=>{
+    return (
+      <div>
+            <h1>{country.name}</h1>
+            <div>
+            {country.capital} <br/>
+            {country.population}
+            </div>
+            <div>
+              <h2>languages</h2>
+              <ul>
+                {country.languages.map((lang)=>{
+                  return (
+                  <li key={lang.iso639_1}>{lang.name}</li>
+                  )
+                })}
+              </ul>
+            </div>
+            <div>
+             <img src={country.flag} alt={`flag of ${country.name}`} width={125}/>
+            </div>
+      </div>
+    )
+}
 
-
-const Filter=({search,countries})=>{
+const Filter=({search,countries,handleToggle})=>{
   let ar=[];
   countries.forEach((country)=>{
     const isPresent=country.name.toUpperCase().search(search.toUpperCase());
@@ -21,26 +44,7 @@ const Filter=({search,countries})=>{
   else if(ar.length===1)
   {
     return (
-      <div>
-            <h1>{ar[0].name}</h1>
-            <div>
-            {ar[0].capital} <br/>
-            {ar[0].population}
-            </div>
-            <div>
-              <h2>languages</h2>
-              <ul>
-                {ar[0].languages.map((lang)=>{
-                  return (
-                  <li key={lang.iso639_1}>{lang.name}</li>
-                  )
-                })}
-              </ul>
-            </div>
-            <div>
-             <img src={ar[0].flag} alt={`flag of ${ar[0].name}`} width={125}/>
-            </div>
-      </div>
+      <Showcountry key={ar[0].alpha3Code} country={ar[0]} />
     )
   }
   else if (ar.length > 10)
@@ -52,7 +56,12 @@ const Filter=({search,countries})=>{
   return (
     <div>
     {
-      ar.map((country)=><div key={country.alpha3Code}>{country.name}</div>)
+      ar.map((country)=>{
+      return (
+      <div key={country.name}>{country.name} <button key={country.name} name={country.name} onClick={handleToggle}>show</button></div>
+      )
+
+    })
     }
     </div>
   )
@@ -73,6 +82,17 @@ const App=()=>{
     setSearch(newSearch);
   }
   
+  const handleToggle=(event)=>{
+    let toggle=false;
+    // console.log('toggle');
+    toggle=!toggle;
+    if(toggle)
+    {
+      const newSearch=event.target.name;
+      setSearch(newSearch);
+    }
+  }
+  
   useEffect(()=>{
   axios.get('https://restcountries.eu/rest/v2/all').then((res)=>{
     setCountries(res.data);
@@ -85,7 +105,7 @@ const App=()=>{
       <form onSubmit={handleOnSubmit}>
         <input value={searchInp} onChange={handleOnChange} />
       </form>
-        <Filter search={searchInp} countries={countries}/>
+        <Filter search={searchInp} handleToggle={handleToggle} countries={countries}/>
     </div>
   )
 }
