@@ -1,30 +1,6 @@
 import React,{useState,useEffect} from 'react';
 import axios from 'axios';
-
-const Showcountry=({country})=>{
-    return (
-      <div>
-            <h1>{country.name}</h1>
-            <div>
-            {country.capital} <br/>
-            {country.population}
-            </div>
-            <div>
-              <h2>languages</h2>
-              <ul>
-                {country.languages.map((lang)=>{
-                  return (
-                  <li key={lang.iso639_1}>{lang.name}</li>
-                  )
-                })}
-              </ul>
-            </div>
-            <div>
-             <img src={country.flag} alt={`flag of ${country.name}`} width={125}/>
-            </div>
-      </div>
-    )
-}
+import Showcountry from './components/Showcountry';
 
 const Filter=({search,countries,handleToggle})=>{
   let ar=[];
@@ -84,7 +60,6 @@ const App=()=>{
   
   const handleToggle=(event)=>{
     let toggle=false;
-    // console.log('toggle');
     toggle=!toggle;
     if(toggle)
     {
@@ -98,7 +73,7 @@ const App=()=>{
     setCountries(res.data);
   })
   },[]);
-  // console.log(countries[0]);
+  
   return (
     <div>
       <h1>App component</h1>
