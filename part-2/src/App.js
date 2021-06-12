@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react';
-import phonebook from './services/Person';
+import phonebook from './services/crud';
 import Show from './components/Show'
 
 const Filter=({search,handleSearch,person})=>{
@@ -63,7 +63,16 @@ const App=()=>{
      let found=person.find(element => element.name === newName);
        if(found && found.name===newName)
        {
-          alert(`${newName} is already added to phonebook`)
+          // alert(`${newName} is already added to phonebook`)
+          if(window.confirm(`${newName} is already added to phonebook,replace the old number with new one?`))
+          {
+            phonebook.update(found.id,newObj)
+            .then(returnedPerson=>{
+              setPerson(person.map((p)=>{
+                return p.id!==found.id ? p : returnedPerson;
+              }))
+            })
+          }
        }
        else
        {
