@@ -1,11 +1,6 @@
 import React,{useState,useEffect} from 'react';
 import phonebook from './services/Person';
-
-const DisplayPerson=({person})=>{
-  return (
-     <div>{person.id} {person.name}  {person.number}</div>
-  )
-}
+import Show from './components/Show'
 
 const Filter=({search,handleSearch,person})=>{
   return (
@@ -26,10 +21,10 @@ const PersonForm=({addPerson,handleOnChange,newNumber,handleNumberInfo,newName})
   )
 }
 
-const Persons=({person})=>{
+const Persons=({person,handleDelete})=>{
     return (
       <div>
-        {person.map((personn)=> <DisplayPerson key={personn.id} person={personn} />)}
+        {person.map((personn)=> <Show key={personn.id} P={personn} handleDelete={()=>handleDelete(personn.id)} />)}
       </div>
     )
 }
@@ -45,7 +40,7 @@ const Search=({search,person})=>{
 
   return (
     <div>
-    {ar.map((p)=> <DisplayPerson key={p.id} person={p} /> )}
+    {ar.map((p)=> <Show key={p.id} P={p} /> )}
     </div>
   )
 }
@@ -102,6 +97,21 @@ const App=()=>{
     setSearch(newSearch);
   }
   
+  const handleDelete=(id)=>{
+    let newPersons=[];
+    const personn=person.find(p=>p.id===id);
+    if(window.confirm(`Delete ${personn.name}`))
+    {
+      phonebook.destroy(id).then(()=>{
+        person.forEach((p)=>{
+          if(p.id!==id)
+          newPersons.push(p);
+        })
+        setPerson(newPersons);
+      })
+    }
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -116,7 +126,7 @@ const App=()=>{
       />
 
       <h2>Numbers</h2>
-      <Persons person={person} />
+      <Persons person={person} handleDelete={handleDelete}/>
     </div>
   )
 }
