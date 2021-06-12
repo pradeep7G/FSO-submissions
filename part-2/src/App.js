@@ -1,8 +1,8 @@
-import React,{useState} from 'react';
-
-const DisplayPerson=({name,number})=>{
+import React,{useState,useEffect} from 'react';
+import axios from 'axios';
+const DisplayPerson=({person})=>{
   return (
-     <div>{name}  {number}</div>
+     <div>{person.id} {person.name}  {person.number}</div>
   )
 }
 
@@ -28,7 +28,7 @@ const PersonForm=({addPerson,handleOnChange,newNumber,handleNumberInfo,newName})
 const Persons=({person})=>{
     return (
       <div>
-        {person.map((personn)=> <DisplayPerson key={personn.name} name={personn.name} number={personn.number} />)}
+        {person.map((personn)=> <DisplayPerson key={personn.id} person={personn} />)}
       </div>
     )
 }
@@ -44,26 +44,28 @@ const Search=({search,person})=>{
 
   return (
     <div>
-    {ar.map((p)=><div key={p.name}>{p.name} {p.number}</div>)}
+    {ar.map((p)=> <DisplayPerson key={p.id} person={p} /> )}
     </div>
   )
 }
 
 const App=()=>{
-  const [person,setPerson]=useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
-  ])
-  
+  const [person,setPerson]=useState([]);
   const [newName,setNewName]=useState('');
   const [newNumber,setNewNumber]=useState('');
   const [search,setSearch]=useState('');
 
+  useEffect(()=>{
+    // console.log('effect');  
+    axios.get('http://localhost:3001/persons').then((response)=>{
+      // console.log(response);
+      setPerson(response.data);
+    })
+  },[]);
+
   const addPerson=(event)=>{
     event.preventDefault();
-    const newObj={name:newName,number:newNumber};
+    const newObj={name:newName,number:newNumber,id:person.length+1};
      let found=person.find(element => element.name === newName);
        if(found && found.name===newName)
        {
@@ -104,7 +106,6 @@ const App=()=>{
     <div>
       <h2>Phonebook</h2>
       <Filter search={search} handleSearch={handleSearch} person={person} />
-
       <h3>Add a new </h3>
       <PersonForm 
       addPerson={addPerson}
