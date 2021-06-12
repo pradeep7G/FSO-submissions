@@ -70,6 +70,16 @@ const App=()=>{
       )
   },[]);
 
+  const notifyWith=(message,color)=>{
+      setColor(color);
+      setMessage(message);
+       setTimeout(()=>{
+                  setMessage(null);
+                  setColor(null);
+                },5000)
+
+  }
+
   const addPerson=(event)=>{
     event.preventDefault();
     const newObj={name:newName,number:newNumber};
@@ -84,18 +94,10 @@ const App=()=>{
                 return p.id!==found.id ? p : returnedPerson;
               })
               );
-              setMessage(`updated ${returnedPerson.name}`);
-                setColor('green');
-                setTimeout(()=>{
-                  setMessage(null);
-                },5000)
+              notifyWith(`updated ${returnedPerson.name}`,'green');
             })
              .catch(error => {
-                setMessage(`Information of ${found.name} has already been deleted from server`);
-                setColor('red');
-                setTimeout(()=>{
-                  setMessage(null);
-                },6100)
+                notifyWith(`Information of ${found.name} has already been deleted from server`,'red');
             })
           }
        }
@@ -111,11 +113,7 @@ const App=()=>{
               phonebook.create(newObj)
               .then(returnedPerson=>{
                 setPerson(person.concat(returnedPerson));
-                setMessage(`Added ${returnedPerson.name}`);
-                setColor('green');
-                setTimeout(()=>{
-                  setMessage(null);
-                },5000)
+                notifyWith(`Added ${returnedPerson.name}`,'green');
               })
           }
       }
@@ -147,11 +145,7 @@ const App=()=>{
           newPersons.push(p);
         })
         setPerson(newPersons);
-        setMessage(`Deleted ${personn.name}`);
-                setColor('red');
-                setTimeout(()=>{
-                  setMessage(null);
-                },5000)
+        notifyWith(`Deleted ${personn.name}`,'red');
       })
     }
   }
