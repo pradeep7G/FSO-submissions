@@ -1,0 +1,9 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+  "title":"Essentialism-the disciplined pursuit",
+  "author":"Greg Mckeown",
+  "url":"file:///C:/Users/prade/Desktop/Essentialism-the-disciplined-pursuit.pdf",
+  "likes":"3000"
+}
