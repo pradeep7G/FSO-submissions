@@ -1,4 +1,5 @@
 const listHelper=require('../utils/list_helper')
+const _ =require('lodash')
 
 const listWithOneblog=[
                           {
@@ -30,9 +31,15 @@ const listWithManyBlogs=[
           },
           {
             title: 'Go To Statement Considered Harmful',
-            author: 'Edsger W. Dijkstra',
+            author: 'Edsger W. Dijktra',
             url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
             likes: 11,
+          },
+          {
+            title:'Essentialism- the disciplined pursuit',
+            author:'Greg Mckeown',
+            url:'abc',
+            likes:1
           }
       ]
 
@@ -56,7 +63,7 @@ describe('total likes',()=>{
 
   test('of a bigger list is calculated right',()=>{
       const result=listHelper.totalLikes(listWithManyBlogs)
-      expect(result).toBe(29)
+      expect(result).toBe(30)
   })
 
   describe('favorite blog',()=>{
@@ -79,7 +86,7 @@ describe('total likes',()=>{
 
       const favoriteblog= {
             title: 'Go To Statement Considered Harmful',
-            author: 'Edsger W. Dijkstra',
+            author: 'Edsger W. Dijktra',
             url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
             likes: 11,
           }
@@ -87,5 +94,49 @@ describe('total likes',()=>{
       expect(listHelper.favoriteBlog(listWithManyBlogs)).toEqual(favoriteblog)
     })
   })
+})
 
+describe('most Blogs',()=>{
+  test('of empty list is empty object',()=>{
+    expect([]).toEqual([])
+  })
+
+  test('of list having single blog is that itself',()=>{
+
+     const result={
+            author: 'Edsger W. Dijkstra',
+            blogs:1
+      }
+    expect(listHelper.mostBlogs(listWithOneblog)).toEqual(result)
+  })
+
+  test('of list having many blogs is right',()=>{
+    const result={
+      author: 'Edsger W. Dijkstra',
+            blogs:3
+    }
+    expect(listHelper.mostBlogs(listWithManyBlogs)).toEqual(result)
+  })
+})
+
+describe('mostLikes',()=>{
+  test('of empty list',()=>{
+    expect([]).toEqual([])
+  })
+
+  test('of list having single blog is itself',()=>{
+    const result={
+            author: 'Edsger W. Dijkstra',
+            likes:5
+      }
+    expect(listHelper.mostLikes(listWithOneblog)).toEqual(result)
+  })
+
+  test('of list having many blogs is right',()=>{
+    const result={
+           author: 'Edsger W. Dijktra',
+            likes:11
+    }
+    expect(listHelper.mostLikes(listWithManyBlogs)).toEqual(result)
+  })
 })
