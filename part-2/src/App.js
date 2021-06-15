@@ -97,7 +97,7 @@ const App=()=>{
               notifyWith(`updated ${returnedPerson.name}`,'green');
             })
              .catch(error => {
-                notifyWith(`Information of ${found.name} has already been deleted from server`,'red');
+                notifyWith(`${error.response.data.error}`,'red');
             })
           }
        }
@@ -115,6 +115,10 @@ const App=()=>{
                 setPerson(person.concat(returnedPerson));
                 notifyWith(`Added ${returnedPerson.name}`,'green');
               })
+              .catch((error)=>{
+                notifyWith(`${error.response.data.error}`,'red')
+              }
+              )
           }
       }
   }
