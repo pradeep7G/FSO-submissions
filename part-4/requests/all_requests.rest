@@ -1,3 +1,19 @@
+GET http://localhost:3001/api/blogs
+
+###
+PUT http://localhost:3001/api/blogs/60c9afdecfb9bc34b8ff6d4a
+Content-Type: application/json
+
+{
+  "title":"Test Sample edited",
+  "author":"pradeep",
+  "likes":3000,
+  "url":"abc"
+}
+###
+DELETE http://localhost:3001/api/blogs/60c9afdecfb9bc34b8ff6d4a
+
+###
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
