@@ -26,6 +26,11 @@ test('all blogs are returned in json format',async ()=>{
 
 })
 
+test('unique identifier of blog posts is named "id" ',async ()=>{
+    const response=await api.get('/api/blogs')
+    expect(response.body[0].id).toBeDefined()
+})
+
 test('valid blogs can be posted',async ()=>{
   await api
   .post('/api/blogs')
