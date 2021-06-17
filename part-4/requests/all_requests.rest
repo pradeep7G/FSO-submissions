@@ -18,8 +18,8 @@ POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
-  "title":"Test Sample 2",
-  "author":"Charlie",
-  "url":"abc",
-  "likes":"3"
+  "title":"default document",
+  "author":"mongo db",
+  "url":"mogodb.com",
+  "likes":"7"
 }

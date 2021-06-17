@@ -1,6 +1,6 @@
 const listHelper=require('../utils/list_helper')
 const _ =require('lodash')
-// console.log()
+
 const listWithOneblog=[
                           {
                             title: 'Go To Statement Considered Harmful',
