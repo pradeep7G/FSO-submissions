@@ -7,15 +7,14 @@ const helper=require('./test_helper')
 const bcrypt=require('bcrypt')
 
 const api=supertest(app)
-
-beforeEach(async ()=>{
-
-  await Blog.deleteMany({})
-  await Blog.insertMany(helper.initialBlogs)
-
-})
-
+jest.setTimeout(10000)
 describe('when initlal blogs are atleast one',()=>{
+  beforeEach(async ()=>{
+  
+    await Blog.deleteMany({})
+    await Blog.insertMany(helper.initialBlogs)
+  
+  })
   test('all blogs are returned in json format',async ()=>{
     
      const response=await api
@@ -33,26 +32,82 @@ describe('when initlal blogs are atleast one',()=>{
 
 })
 
-describe('additon of a new blog',()=>{
+describe('a valid user',()=>{
   
-  test('valid blogs can be posted',async ()=>{
+  beforeEach(async ()=>{
+       await Blog.deleteMany({})
+       await User.deleteMany({})
+        const newUser={
+        username:"JhonforIntegrationTest",
+        name:"Jhon",
+        password:"testsTDD"
+      }
+     const response = await api
+        .post('/api/users')
+        .send(newUser)
+  })
+
+  test(' can be added',async ()=>{
+
+      await User.deleteMany({})
+      await Blog.deleteMany({})
+
+      const newUser={
+        username:"JhonforIntegrationTest",
+        name:"Jhon",
+        password:"testsTDD"
+      }
+
+      await api
+        .post('/api/users')
+        .send(newUser)
+        .expect(200)
+        .expect('Content-Type',/application\/json/)
+
+  })
+
+  test('can log in',async ()=>{
+    const user={
+      username:"JhonforIntegrationTest",
+      password:"testsTDD"
+    }
+
+    const response=await api
+      .post('/api/login')
+      .send(user)
+      .expect(200)
+    })
+
+  test('can post valid blogs ',async ()=>{
   
+     const user={
+      username:"JhonforIntegrationTest",
+      password:"testsTDD"
+    }
+
+    const response=await api
+      .post('/api/login')
+      .send(user)
+      .expect(200)
+
     const blog={
       title:'curiosity perseverence',
       author:'Nasa',
       url:'www.nasa.com/',
       like:10000
     }
-    
+    const blogsAtStart=await helper.blogsInDb()
+    const token=response.body.token
     await api
-    .post('/api/blogs')
-    .send(blog)
-    .expect(201)
-    .expect('Content-Type',/application\/json/)
+      .post('/api/blogs')
+      .set('Authorization',`bearer ${token}`)
+      .send(blog)
+      .expect(201)
+      .expect('Content-Type',/application\/json/)
   
     const blogsAtEnd=await helper.blogsInDb()
     
-    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length+1)
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length+1)
     
     const contents=blogsAtEnd.map(blog => blog.title)
   
@@ -61,70 +116,215 @@ describe('additon of a new blog',()=>{
     )
   
   })
+
+  test('an invalid blog post fails with proper status code and error message if token is not provided',async ()=>{
+     const user={
+      username:"JhonforIntegrationTest",
+      password:"testsTDD"
+    }
+
+    const response=await api
+      .post('/api/login')
+      .send(user)
+      .expect(200)
+
+    const blog={
+      title:'curiosity perseverence',
+      author:'Nasa',
+      url:'www.nasa.com/',
+      like:10000
+    }
+    const blogsAtStart=await helper.blogsInDb()
+    const token=response.body.token
+    await api
+      .post('/api/blogs')
+      .set('Authorization',``)
+      .send(blog)
+      .expect(401)
+      .expect('Content-Type',/application\/json/)
+  
+    const blogsAtEnd=await helper.blogsInDb()
+    
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length)
+    
+    const contents=blogsAtEnd.map(blog => blog.title)
+  
+    expect(contents).not.toContain(
+      'curiosity perseverence'
+    )
+  })
   
   test('if likes property undefined , likes value set to zero',async ()=>{
     
-    const blog={
-              title:'Umbrella academy',
-              author:'reginald hargreeves',
-              url:'www.UA.com/'
+     const user={
+      username:"JhonforIntegrationTest",
+      password:"testsTDD"
     }
+
+    const response=await api
+      .post('/api/login')
+      .send(user)
+      .expect(200)
+
+      const blog={
+                title:'Umbrella academy',
+                author:'reginald hargreeves',
+                url:'www.UA.com/'
+      }
+    const blogsAtStart=await helper.blogsInDb()
+    const token=response.body.token
+    const result=await api
+                  .post('/api/blogs')
+                  .set('Authorization',`bearer ${token}`)
+                  .send(blog)
+                  .expect(201)
+                  .expect('Content-Type',/application\/json/)
   
-    const response=await api.post('/api/blogs').send(blog).expect(201)
-    expect(response.body.likes).toBe(0)
+    const blogsAtEnd=await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length+1)
+    expect(result.body.likes).toBe(0)
   })
   
   test('title and url are required',async ()=>{
+
     const blog={
       author:'morgan stanley',
       likes:101
     }
-  
-    await api.post('/api/blogs').send(blog).expect(400)
-  
-    const blogsAtEnd=await Blog.find({})
-  
-    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
-  
-  })
 
+    const user={
+      username:"JhonforIntegrationTest",
+      password:"testsTDD"
+    }
+
+    const response=await api
+                    .post('/api/login')
+                    .send(user)
+                    .expect(200)
+
+    const token=response.body.token
+    blogsAtStart=await helper.blogsInDb()
+    await api
+           .post('/api/blogs')
+           .set('Authorization',`bearer ${token}`)
+           .send(blog)
+           .expect(400)
+    const blogsAtEnd=await Blog.find({})
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length)
+  })
 })
 
 describe('accessing a specific blog',()=>{
 
-  test('a specific blog can be viewed',async ()=>{
-    const blogsAtStart=await helper.blogsInDb()
-    const blogToView=blogsAtStart[0]
+  beforeEach(async ()=>{
+       await Blog.deleteMany({})
+       await User.deleteMany({})
+        const newUser={
+        username:"JhonforIntegrationTest",
+        name:"Jhon",
+        password:"testsTDD"
+      }
+     const response = await api
+        .post('/api/users')
+        .send(newUser)
 
+        const blog={
+      title:'curiosity perseverence',
+      author:'Nasa',
+      url:'www.nasa.com/',
+      like:10000
+    }
+
+    const user={
+      username:"JhonforIntegrationTest",
+      password:"testsTDD"
+    }
+
+    const result=await api
+                    .post('/api/login')
+                    .send(user)
+                    .expect(200)
+
+    const token=result.body.token
+                     await api
+                      .post('/api/blogs')
+                      .set('Authorization',`bearer ${token}`)
+                      .send(blog)
+                      .expect(201)
+                      .expect('Content-Type',/application\/json/)
+      
+  })
+
+  test('a specific blog can be viewed',async ()=>{
+    const credentials={
+      username:"JhonforIntegrationTest",
+      password:"testsTDD"
+    }
+
+    const user=await (await User.findOne({username:credentials.username}))
+    const blogs=user.blogs
+    const blogToView=blogs[0]
     const resultedBlog=await api
-                        .get(`/api/blogs/${blogToView.id}`)
+                        .get(`/api/blogs/${blogToView}`)
                         .expect(200)
                         .expect('Content-Type',/application\/json/)
-
-    const processedBlog=JSON.parse(JSON.stringify(blogToView))
-
-    expect(resultedBlog.body).toEqual(processedBlog)
   })
 
 })
 
 describe('deleting a blog',()=>{
+
+  beforeEach(async ()=>{
+       await Blog.deleteMany({})
+       await User.deleteMany({})
+        const newUser={
+        username:"JhonforIntegrationTest",
+        name:"Jhon",
+        password:"testsTDD"
+      }
+     const response = await api
+        .post('/api/users')
+        .send(newUser)
+  })
+  
   test('a valid blog can be deleted',async ()=>{
-  
+    const user={
+      username:"JhonforIntegrationTest",
+      password:"testsTDD"
+    }
+    const response=await api
+      .post('/api/login')
+      .send(user)
+      .expect(200)
+
+    const blog={
+                    title:'curiosity perseverence',
+                    author:'Nasa',
+                    url:'www.nasa.com/',
+                    like:10000
+               }
+  const token=response.body.token
+  const savedBlog=await api
+                  .post('/api/blogs')
+                  .set('Authorization',`bearer ${token}`)
+                  .send(blog)
+                  .expect(201)
+                  .expect('Content-Type',/application\/json/)
+               
     const blogsAtStart=await helper.blogsInDb()
-    const blogToDelete=blogsAtStart[0]
-  
+    const savedBlogId=savedBlog.body.id.toString()
     await api
-       .delete(`/api/blogs/${blogToDelete.id}`)
+       .delete(`/api/blogs/${savedBlogId}`)
+       .set('Authorization',`bearer ${token}`)
        .expect(204)
   
     const blogsAtEnd=await helper.blogsInDb()
   
-    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length-1)
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length-1)
   
     const contents=blogsAtEnd.map(blog => blog.title)
   
-    expect(contents).not.toContain(blogToDelete.title)
+    expect(contents).not.toContain(savedBlog.body.title)
   
   })
 
@@ -209,9 +409,7 @@ describe('when there is one user in db',()=>{
 
     const usersAtEnd=await helper.usersInDb()
     expect(usersAtEnd).toHaveLength(usersAtStart.length)
-
   })
-
 })
 
 afterAll(()=>{
