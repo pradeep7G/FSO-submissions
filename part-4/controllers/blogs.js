@@ -25,13 +25,7 @@ blogsRouter.get('/:id',async (req, res,next) => {
 blogsRouter.post('/',async (req,res,next)=>{
 
   const body=req.body
-  const token=req.token
-  const decodedToken=jwt.verify(token,process.env.SECRET)
-  
-  if(!token || !decodedToken){
-    return res.status(401).json({error:'token missing or invalid'})
-  }
-  const user=await User.findById(decodedToken.id)
+  const user=req.user
   
   const blog=new Blog({
     title:body.title,
@@ -51,19 +45,13 @@ blogsRouter.post('/',async (req,res,next)=>{
 
 blogsRouter.delete('/:id',async (req,res,next)=>{
   
-  const token=req.token
-  const decodedToken=jwt.verify(token,process.env.SECRET)
- if(!token || !decodedToken)
- {
-   return res.status(401).json({error:'token is missing or invalid'})
- }
+  const user=req.user
   const blogToDelete=await Blog.findById(req.params.id)
-  if(blogToDelete===null || blogToDelete.user._id.toString() !== decodedToken.id)
+  if(!blogToDelete || !user || blogToDelete.user.toString() !== user._id.toString())
   {
     return  res.status(401).json({error:'unauthorised!! permission denied :( only the creator of the blog post can delete the blog'})
   }
   await Blog.findByIdAndRemove(req.params.id)
-  const user=await User.findById(decodedToken.id)
   user.blogs=user.blogs.filter(blog => blog!==blogToDelete._id)
   await user.save()
   res.status(204).end()

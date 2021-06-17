@@ -1,5 +1,5 @@
 GET http://localhost:3001/api/blogs
-
+# Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InByYWRlZXAyNTcyIiwiaWQiOiI2MGNhYjQ2YmRkOGY4YjE5YTRlMzAyMzUiLCJpYXQiOjE2MjM5MTMzNDcsImV4cCI6MTYyMzkxNjk0N30.s4oMbKIX27W7qHmMZAV2VFBcFS3LbVL07y97x4Vj6s4
 ###
 PUT http://localhost:3001/api/blogs/60c9afdecfb9bc34b8ff6d4a
 Content-Type: application/json
@@ -18,7 +18,7 @@ POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
-  "title":"Pradeep's quantum ",
+  "title":"Pradeep's quantum trtt",
   "author":"pradeep",
   "url":"pradeep.com",
   "likes":"7"
@@ -27,15 +27,15 @@ Content-Type: application/json
 ### 
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlbXBvcmFyeSB1c2VyIiwiaWQiOiI2MGNhZWI0OTIxMGVhMDEzZjRlYjI2MWUiLCJpYXQiOjE2MjM5MTE1OTB9.dV48CNcbpXApbtQkQ6xDsKnbhQATne1TP4eDB9l0G5Q
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InByYWRlZXAyNTcyIiwiaWQiOiI2MGNhYjQ2YmRkOGY4YjE5YTRlMzAyMzUiLCJpYXQiOjE2MjM5MTQ4OTF9.b0E2alEQjMe1iY81POQ6E4nU72jCERejVwGXC9rL5l0
 
 {
-  "title":"TeeBlog",
-  "author":"Temp",
-  "url":"t.com",
-  "likes":112
+  "title":"Rechard Fenman-The Lengend",
+  "author":"pradeep",
+  "url":"Feynman.com",
+  "likes":1
 }
 
 ###
-DELETE http://localhost:3001/api/blogs/60caed73e11a722d94af04a9
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlbXBvcmFyeSB1c2VyIiwiaWQiOiI2MGNhZWI0OTIxMGVhMDEzZjRlYjI2MWUiLCJpYXQiOjE2MjM5MTE1OTB9.dV48CNcbpXApbtQkQ6xDsKnbhQATne1TP4eDB9l0G5Q
+DELETE http://localhost:3001/api/blogs/60caca10e6180316c409f111
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InByYWRlZXAyNTcyIiwiaWQiOiI2MGNhYjQ2YmRkOGY4YjE5YTRlMzAyMzUiLCJpYXQiOjE2MjM5MTQ4OTF9.b0E2alEQjMe1iY81POQ6E4nU72jCERejVwGXC9rL5l0
