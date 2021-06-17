@@ -18,8 +18,8 @@ POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
-  "title":"default document",
-  "author":"mongo db",
-  "url":"mogodb.com",
+  "title":"Pradeep's quantum physics blog",
+  "author":"pradeep",
+  "url":"pradeep.com",
   "likes":"7"
 }

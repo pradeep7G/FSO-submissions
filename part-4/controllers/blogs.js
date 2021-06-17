@@ -1,8 +1,11 @@
 const blogsRouter=require('express').Router()
 const Blog=require('../models/blog')
+const User=require('../models/user')
 
 blogsRouter.get('/',async (req, res,next) => {
-  const blogs=await Blog.find({})
+  const blogs=await Blog
+                .find({})
+                .populate('user',{username:1,name:1})//populate('user',{username:1,name:1}) for selective population
     res.json(blogs)
   }
 )
@@ -20,15 +23,22 @@ blogsRouter.get('/:id',async (req, res,next) => {
 )
 
 blogsRouter.post('/',async (req,res,next)=>{
+
+  const user=await User.findOne({username:"pradeep2572"})
+  console.log(user)
   const blog=new Blog({
     title:req.body.title,
     author:req.body.author,
     url:req.body.url, 
-    likes:req.body.likes || 0
+    likes:req.body.likes || 0,
+    user:user._id
   })
 
- const result = await blog.save()
- res.status(201).json(result)
+  const savedBlog=await blog.save()
+  user.blogs=user.blogs.concat(savedBlog)
+  await user.save()
+
+ res.status(201).json(savedBlog)
 
 })
 
