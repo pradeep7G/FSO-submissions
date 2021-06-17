@@ -11,16 +11,15 @@ usersRouter.get('/',async (req,res)=>{
 
 usersRouter.post('/',async (req,res)=>{
   const body=req.body
-
   if(body.username===undefined || body.password===undefined)
   {
-     res.status(401).json({
+     return res.status(401).json({
        error:'invalid username or password, Both username and password must be given'
      })
   }
   else if(body.username.length<3 || body.password.length<3)
   {
-     res.status(401).json({
+     return res.status(401).json({
        error:'invalid username or password Both username and password must be atleast 3 characters long'
      })
   }

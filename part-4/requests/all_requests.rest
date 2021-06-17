@@ -18,7 +18,7 @@ POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
-  "title":"Pradeep's quantum physics blog",
+  "title":"Pradeep's quantum ",
   "author":"pradeep",
   "url":"pradeep.com",
   "likes":"7"
@@ -27,11 +27,15 @@ Content-Type: application/json
 ### 
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InByYWRlZXAyNTcyIiwiaWQiOiI2MGNhYjQ2YmRkOGY4YjE5YTRlMzAyMzUiLCJpYXQiOjE2MjM5MDc0Nzl9.9PPU8dDeFs1QHVx7qkITHHpcUEbtTiLDjturZ9pgTG4
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlbXBvcmFyeSB1c2VyIiwiaWQiOiI2MGNhZWI0OTIxMGVhMDEzZjRlYjI2MWUiLCJpYXQiOjE2MjM5MTE1OTB9.dV48CNcbpXApbtQkQ6xDsKnbhQATne1TP4eDB9l0G5Q
 
 {
-  "title":"verifying login with token and posting blog",
-  "author":"pradeep",
-  "url":"pradeep.com/",
-  "likes":10
+  "title":"TeeBlog",
+  "author":"Temp",
+  "url":"t.com",
+  "likes":112
 }
+
+###
+DELETE http://localhost:3001/api/blogs/60caed73e11a722d94af04a9
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlbXBvcmFyeSB1c2VyIiwiaWQiOiI2MGNhZWI0OTIxMGVhMDEzZjRlYjI2MWUiLCJpYXQiOjE2MjM5MTE1OTB9.dV48CNcbpXApbtQkQ6xDsKnbhQATne1TP4eDB9l0G5Q
