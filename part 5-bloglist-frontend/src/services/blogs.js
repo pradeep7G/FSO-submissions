@@ -10,27 +10,27 @@ const getAll = () => {
   return request.then(response => response.data)
 }
 
-const create=async (newObject)=>{
-    const config={
-      headers:{
-        Authorization:token
-      }
-    }
-    const response=await axios.post(baseUrl,newObject,config)
-    return response.data
-}
-
-const update=async (id,newObject)=>{
-    const response=await axios.put(`${baseUrl}/${id}`,newObject)
-    return response.data
-}
-
-const destroy=async (id)=>{
+const create=async (newObject) => {
   const config={
-      headers:{
-        Authorization:token
-      }
+    headers:{
+      Authorization:token
     }
+  }
+  const response=await axios.post(baseUrl,newObject,config)
+  return response.data
+}
+
+const update=async (id,newObject) => {
+  const response=await axios.put(`${baseUrl}/${id}`,newObject)
+  return response.data
+}
+
+const destroy=async (id) => {
+  const config={
+    headers:{
+      Authorization:token
+    }
+  }
   await axios.delete(`${baseUrl}/${id}`,config)
 }
 export default { getAll,create,update,setToken,delete:destroy }
