@@ -4,6 +4,11 @@ import { render,fireEvent } from '@testing-library/react'
 import { prettyDOM } from '@testing-library/dom'
 import Blog from './Blog'
 
+const other={
+  own:true,
+  handleRemove:() => {},
+  handleLike: () => {}
+}
 
 describe('<Blog />',() => {
   let component
@@ -17,9 +22,6 @@ describe('<Blog />',() => {
 
   beforeEach(() => {
 
-    updateBlog=jest.fn()
-    deleteBlog=jest.fn()
-
     component=render(
       <Blog blog={blog} updateBlog={updateBlog} deleteBlog={deleteBlog} />
     )
@@ -28,40 +30,74 @@ describe('<Blog />',() => {
 
   test('<Blog /> displays blogs\' title and author and does not show url or number of likes by default' ,() => {
 
-    const defaultView=component.container.querySelector('.BlogComponent .before')
-    expect(defaultView).toBeDefined()
-    console.log(prettyDOM(defaultView))
-    const button=component.container.querySelector('button')
-    expect(button).toHaveTextContent('view')
-    expect(defaultView).toHaveTextContent(`${blog.title} - ${blog.author} view`)
+    const blog={
+      author:'Ron jeffries',
+      title:'you are not gonna need it!',
+      url:'abc.com',
+      likes:3,
+    }
+
+    const component=render(
+      <Blog blog={blog} {...other} />
+    )
+
+    expect(component.container).toHaveTextContent(blog.author)
+    expect(component.container).toHaveTextContent(blog.title)
+    expect(component.container).not.toHaveTextContent(blog.url)
 
   })
 
   test('when toggled whole details of the blog are shown',() => {
 
-    const defaultView=component.container.querySelector('.BlogComponent .before')
-    const button=defaultView.querySelector('button')
-    console.log(prettyDOM(button))
-    fireEvent.click(button)
-    const afterFiredButton=component.container.querySelector('button')
-    const toggledView=component.container.querySelector('.BlogComponent .after')
-    expect(toggledView).toBeDefined()
-    expect(toggledView).toHaveTextContent(`${blog.url} likes ${blog.likes} like`)
-    expect(afterFiredButton).toHaveTextContent('hide')
+    const blog={
+      author:'Ron jeffries',
+      title:'you are not gonna need it!',
+      url:'abc.com',
+      likes:3,
+      user:{
+        name:'John surez'
+      }
+    }
+
+    const component=render(
+      <Blog blog={blog} {...other} />
+    )
+
+    const viewButton=component.getByText('view')
+    fireEvent.click(viewButton)
+
+    expect(component.container).toHaveTextContent(blog.url)
+    expect(component.container).toHaveTextContent(`likes ${blog.likes}`)
+
   })
 
   test('if like button clicked twice',() => {
-    const initialLikes=blog.likes
-    const button=component.container.querySelector('button')
-    expect(button).toHaveTextContent('view')
-    fireEvent.click(button)
-    const afterFiredButton=component.container.querySelector('button')
-    expect(afterFiredButton).toHaveTextContent('hide')
-    const likesButton=component.getByText('like')
-    fireEvent.click(likesButton)
-    fireEvent.click(likesButton)
-    expect(updateBlog.mock.calls).toHaveLength(2)
-    expect(updateBlog.mock.calls[0][1].likes).toBe(initialLikes+2)
+
+    const blog={
+      author:'Ron jeffries',
+      title:'you are not gonna need it!',
+      url:'abc.com',
+      likes:3,
+      id:1,
+      user:{
+        name:'John surez'
+      }
+    }
+
+    other.handleLike=jest.fn()
+
+    const component=render(
+      <Blog blog={blog} {...other} />
+    )
+
+    const viewButton=component.getByText('like')
+    fireEvent.click(viewButton)
+
+    const likeButton=component.getByText('like')
+    fireEvent.click(likeButton)
+    fireEvent.click(likeButton)
+
+    expect(other.handleLike.mock.calls.length).toBe(2)
   })
 })
 

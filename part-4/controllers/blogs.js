@@ -50,7 +50,7 @@ blogsRouter.delete('/:id',async (req,res,next)=>{
   
   const user=req.user
   const blogToDelete=await Blog.findById(req.params.id)
-  if(!blogToDelete || !user || blogToDelete.user.toString() !== user._id.toString())
+  if(!blogToDelete || !user || blogToDelete.user !== user._id.toString())
   {
     return  res.status(401).json({error:'unauthorised!! permission denied :( only the creator of the blog post can delete the blog'})
   }

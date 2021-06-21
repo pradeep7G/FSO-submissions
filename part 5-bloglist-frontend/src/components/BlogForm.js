@@ -1,6 +1,4 @@
 import React,{ useState } from 'react'
-import PropTypes from 'prop-types'
-import Togglable from './Togglable'
 
 const BlogForm=({ createBlog }) => {
 
@@ -33,7 +31,8 @@ const BlogForm=({ createBlog }) => {
   }
 
   return (
-    <div className="newBlog">
+    <div>
+      <h2>Create new</h2>
       <form onSubmit={addBlog}>
         <div>
           title: <input id="title" type="text" value={title} onChange={handleTitle}/>
@@ -51,10 +50,5 @@ const BlogForm=({ createBlog }) => {
     </div>
   )
 }
-
-Togglable.propTypes={
-  createBlog:PropTypes.func.isRequired
-}
-
 
 export default BlogForm
