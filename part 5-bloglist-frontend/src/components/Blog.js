@@ -1,5 +1,4 @@
 import React,{ useState } from 'react'
-
 const blogStyle={
   paddingTop:10,
   paddngLeft:2,
@@ -12,7 +11,7 @@ const BlogBeforeToggle = ({ blog,toggleVisibility,text }) => {
 
   return (
     <div style={blogStyle} className="before">
-      {blog.title} - {blog.author} <button onClick={() => toggleVisibility()}>{text}</button> <br/>
+      {blog.title} - {blog.author} <button id={text} onClick={() => toggleVisibility()}>{text}</button> <br/>
     </div>
   )
 }
@@ -29,8 +28,13 @@ const BlogAfterToggle = ({ blog,toggleVisibility,text,updateBlog,deleteBlog }) =
   const handleDelete=() => {
     if(window.confirm(`Remove blog ${blog.title}`))
     {
-      deleteBlog(blog.id)
-      setDel(true)
+      const res=deleteBlog(blog.id)
+      res.then(result => {
+        if(result)
+          setDel(true)
+        else
+          setDel(false)
+      })
     }
   }
 
@@ -41,11 +45,11 @@ const BlogAfterToggle = ({ blog,toggleVisibility,text,updateBlog,deleteBlog }) =
   else {
     return (
       <div style={blogStyle} className="after">
-        {blog.title} - {blog.author} <button onClick={() => toggleVisibility()}>{text}</button> <br/>
+        {blog.title} - {blog.author} <button id={text} onClick={() => toggleVisibility()}>{text}</button> <br/>
         {blog.url} <br/>
-        likes {blog.likes}  <button onClick={() => handleLikes(updateBlog)}>like</button> <br/>
+        likes {blog.likes}  <button id="like" onClick={() => handleLikes(updateBlog)}>like</button> <br/>
         {blog.author} <br/>
-        <button onClick={handleDelete}>remove</button>
+        <button id="remove" onClick={handleDelete}>remove</button>
       </div>
     )
   }
@@ -59,9 +63,10 @@ const Blog=({ blog,updateBlog,deleteBlog }) => {
   }
   return (
     <div className="BlogComponent">
-    toggle
-      ?<BlogAfterToggle blog={blog} toggleVisibility={toggleVisibility} text={text} updateBlog={updateBlog} deleteBlog={deleteBlog}/>
-      :<BlogBeforeToggle blog={blog} toggleVisibility={toggleVisibility} text={text} />
+      {toggle
+        ?<BlogAfterToggle blog={blog} toggleVisibility={toggleVisibility} text={text} updateBlog={updateBlog} deleteBlog={deleteBlog}/>
+        :<BlogBeforeToggle blog={blog} toggleVisibility={toggleVisibility} text={text} />
+      }
     </div>
   )
 }

@@ -106,9 +106,10 @@ const App = (props) => {
 
   const deleteBlog=async (id) => {
     try{
-      await blogService.delete(id)
+      const res=await blogService.delete(id)
+      return true
     }catch(exception){
-      console.log(exception.error)
+      return false
     }
   }
 
@@ -117,6 +118,7 @@ const App = (props) => {
       <div>
       username
         <input
+          id="username"
           type="text"
           name="Username"
           value={username}
@@ -126,13 +128,14 @@ const App = (props) => {
       <div>
       password
         <input
+          id="password"
           type="password"
           name="Password"
           value={password}
           onChange={({ target }) => setPassword(target.value)}
         />
       </div>
-      <button type="submit">login</button>
+      <button id="login-button" type="submit">login</button>
     </form>
   )
 
@@ -170,17 +173,19 @@ const App = (props) => {
         <div>
           <Notifications message={errorMessage} color={color}/>
           <b>{user.name} </b> logged-in
-          <button onClick={logout}>logout</button>
+          <button id="logout" onClick={logout}>logout</button>
         </div>
         <div>
           <h2>Create New</h2>
           {blogForm()}
-          <h4>Blogs</h4>
-          {
-            blogs.map(blog =>
-              <Blog key={blog.id} blog={blog} updateBlog={updateBlog} deleteBlog={deleteBlog}/>
-            )
-          }
+          <div className="blogs">
+            <h4>Blogs</h4>
+            {
+              blogs.map(blog =>
+                <Blog key={blog.id} blog={blog} updateBlog={updateBlog} deleteBlog={deleteBlog}/>
+              )
+            }
+          </div>
         </div>
       </div>
     )
