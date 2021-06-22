@@ -24,12 +24,9 @@ const AnecdotesList=()=>{
   const filter=useSelector(state => state.filter)
   const byVotes=(a,b)=>b.votes-a.votes
 
-  const handleClick=(anecdote)=>{
-    dispatch(Vote(anecdote.id))
-    dispatch(setMessage(`you voted ${anecdote.content}`))
-    setTimeout(()=>{
-      dispatch(resetMessage())
-    },5000)
+  const handleClick=async (anecdote)=>{
+    dispatch(Vote(anecdote))
+    dispatch(setMessage(`you voted '${anecdote.content}'`,5))
   }
 
 return (
