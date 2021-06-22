@@ -49,7 +49,7 @@ export const AddNewAnecdote=(content)=>{
     data:{
       content,
       id:getId(),
-      votes:0
+      votes:0,
     }
   }
 }
