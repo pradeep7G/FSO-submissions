@@ -19,7 +19,6 @@ export const setMessage=(message,time) => {
 
       for(let i=0;i<previousNotifications.length;i++)
       {
-        console.log(previousNotifications[i])
         clearTimeout(previousNotifications[i])
       }
 

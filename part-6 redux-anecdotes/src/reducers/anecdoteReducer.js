@@ -1,4 +1,3 @@
-import axios from 'axios'
 import anecdoteService from '../services/notes'
 
 const reducer = (state = [], action) => {
