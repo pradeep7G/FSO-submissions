@@ -8,6 +8,8 @@ const notificationReducer=(state='Welcome',action)=>{
     }
 }
 
+const previousNotifications=[]
+
 export const setMessage=(message,time) => {
   return async dispatch => {
      dispatch({
@@ -15,12 +17,19 @@ export const setMessage=(message,time) => {
         message:message
       })
 
-      setTimeout(()=>{
+      for(let i=0;i<previousNotifications.length;i++)
+      {
+        console.log(previousNotifications[i])
+        clearTimeout(previousNotifications[i])
+      }
+
+      previousNotifications.push(setTimeout(()=>{
         dispatch({
           type:'SET_MESSAGE',
           message:null
         })
       },time*1000)
+      )
   }
 }
 
