@@ -1,0 +1,59 @@
+{
+  "notes": [
+    {
+      "content": "custom-hooks are grat",
+      "id": 1
+    },
+    {
+      "content": "the best featrure ever <3",
+      "id": 2
+    },
+    {
+      "content": "curstom hooks are god send",
+      "id": 3
+    },
+    {
+      "content": "henlo",
+      "id": 4
+    },
+    {
+      "content": "henlo",
+      "id": 5
+    },
+    {
+      "content": "henlo",
+      "id": 6
+    },
+    {
+      "content": "then let's go to next topic",
+      "id": 7
+    }
+  ],
+  "persons": [
+    {
+      "name": "mluukkai",
+      "number": "040-5483923",
+      "id": 1
+    },
+    {
+      "name": "kaltsoon",
+      "number": "045-2323456",
+      "id": 2
+    },
+    {
+      "name": "hanna",
+      "number": "4355-2-2--2-1",
+      "id": 3
+    },
+    {
+      "name": "hey FTW fk the world",
+      "number": "1",
+      "id": 4
+    },
+    {
+      "name": "flow by mickayljafoafoaf",
+      "number": "1234",
+      "id": 5
+    }
+  ]
+}
