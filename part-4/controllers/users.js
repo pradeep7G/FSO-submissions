@@ -5,8 +5,17 @@ const User=require('../models/user')
 usersRouter.get('/',async (req,res)=>{
   const users = await User
                   .find({})
-                  .populate('blogs',{title:1,author:1,url:1})
+                  .populate('blogs',{title:1,author:1,url:1,comments:1,likes:1})
   res.json(users)
+})
+
+usersRouter.get('/:id',async (req,res)=>{
+  console.log(req.params.id)
+  const user = await User
+  .findById(req.params.id)
+  .populate('blogs',{title:1,author:1,url:1,likes:1})
+  console.log(user)
+  res.json(user)
 })
 
 usersRouter.post('/',async (req,res)=>{

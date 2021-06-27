@@ -6,12 +6,15 @@ blogsRouter.get('/',async (req, res,next) => {
   const blogs=await Blog
                 .find({})
                 .populate('user',{username:1,name:1})//populate('user',{username:1,name:1}) for selective population
+    console.log(blogs)
     res.json(blogs)
   }
 )
 
 blogsRouter.get('/:id',async (req, res,next) => {
-  const response=await Blog.findById(req.params.id)
+  const response=await Blog
+                        .findById(req.params.id)
+                        .populate('user',{username:1,name:1})
   if(response)
   {
     res.status(200).send(response.toJSON())
@@ -21,6 +24,20 @@ blogsRouter.get('/:id',async (req, res,next) => {
   }
 }
 )
+
+blogsRouter.post('/:id/comments',async (req,res,next) => {
+  const id=req.params.id
+  const comment=req.body.comment
+  if(!req.user || !req.token)
+  {
+    return res.status(401).json({error:'token is missing or invalid'})
+  }
+  const blog=await Blog
+                    .findById(id)
+  blog.comments.push(comment)
+  const updatedBlog=await blog.save()
+  res.status(200).json(updatedBlog)
+})
 
 blogsRouter.post('/',async (req,res,next)=>{
 
@@ -50,7 +67,7 @@ blogsRouter.delete('/:id',async (req,res,next)=>{
   
   const user=req.user
   const blogToDelete=await Blog.findById(req.params.id)
-  if(!blogToDelete || !user || blogToDelete.user !== user._id.toString())
+  if(!blogToDelete || !user || blogToDelete.user.toString() !== user._id.toString())
   {
     return  res.status(401).json({error:'unauthorised!! permission denied :( only the creator of the blog post can delete the blog'})
   }

@@ -1,0 +1,9 @@
+GET http://localhost:3001/api/blogs
+
+###
+POST http://localhost:3001/api/blogs/60d848fe57b03421f0b071ca/comments
+Content-Type: application/json
+
+{
+  "comment":"user can only comment when he logged in his account"
+}
