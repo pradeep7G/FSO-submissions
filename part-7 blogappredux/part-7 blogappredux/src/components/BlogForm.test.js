@@ -4,7 +4,7 @@ import { render,fireEvent } from '@testing-library/react'
 import { prettyDOM } from '@testing-library/dom'
 import BlogForm from './BlogForm'
 
-describe('BlogForm',()=>{
+describe('BlogForm',() => {
   test('When created, the callback will be called with data entered to form',function(){
     const createBlog=jest.fn()
 
@@ -24,13 +24,13 @@ describe('BlogForm',()=>{
     const form=component.container.querySelector('form')
 
     fireEvent.change(author,{
-      target:{value:blogData.author}
+      target:{ value:blogData.author }
     })
     fireEvent.change(title,{
-      target:{value:blogData.title}
+      target:{ value:blogData.title }
     })
     fireEvent.change(url,{
-      url:{value:blogData.url}
+      url:{ value:blogData.url }
     })
     fireEvent.submit(form)
 

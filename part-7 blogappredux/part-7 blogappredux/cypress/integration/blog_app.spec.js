@@ -74,9 +74,9 @@ describe('Blog app',function(){
       }
       cy.createBlog(blog)
       cy.contains('logout').click()
-      cy.login({username:'Google',password:'google'})
-      cy.createBlog({author:'Jhon doe',title:'test1',url:'http://abc.com'})
-      cy.createBlog({author:'Jhon doe',title:'test2',url:'http://abc.com'})
+      cy.login({ username:'Google',password:'google' })
+      cy.createBlog({ author:'Jhon doe',title:'test1',url:'http://abc.com' })
+      cy.createBlog({ author:'Jhon doe',title:'test2',url:'http://abc.com' })
 
       cy.contains('test1').parent().parent().as('blog1')
       cy.contains('test2').parent().parent().as('blog2')

@@ -1,52 +1,54 @@
-import React,{ useState } from 'react'
-import PropTypes from 'prop-types'
+import React,{ useState,useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { likeBlog,removeBlog } from '../reducers/blogReducer'
+import blogService from '../services/blogs'
+import { useHistory, useParams } from 'react-router-dom'
 
-const Blog=({ blog,handleLike,handleRemove,own }) => {
-  const [visible,setVisible]=useState(false)
+const Blog=() => {
+  const [blog,setBlog]=useState(null)
+  const dispatch = useDispatch()
+  const history=useHistory()
+  const id=useParams().id
 
-  const blogStyle={
-    paddingTop:10,
-    paddngLeft:2,
-    border:'solid',
-    borderWidth:1,
-    marginBottom:5
+  useEffect(() => {
+    const getBlog = async () => {
+      const blog=await blogService.getOne(id)
+      setBlog(blog)
+    }
+    getBlog()
+  },[])
+
+  const handleLike=async (blog) => {
+    const likedBlog={ ...blog,likes:blog.likes+1 }
+    dispatch(likeBlog(likedBlog))
+    setBlog(likedBlog)
+  }
+  const handleRemove=async (blog) => {
+    dispatch(removeBlog(blog))
+    history.push('/')
+    setBlog(null)
   }
 
-  const label=visible?'hide':'view'
-
-  return (
-    <div style={blogStyle} className='blog'>
-      <div>
-        <i>{blog.title}</i> by {blog.author} <button onClick={() => setVisible(!visible)}>{label}</button>
-      </div>
-      {
-        visible && (
-          <div>
-            <div>{blog.url}</div>
-            <div>likes {blog.likes}
-              <button onClick={() => handleLike(blog.id)}>Like</button>
-            </div>
-            <div>
-              {blog.user.name}
-            </div>
-            {own && <button onClick={() => handleRemove(blog.id)}>remove</button>}
+  if(blog)
+  {
+    return (
+      <div className='blog'>
+        <div>
+          <h2><i>{blog.title}</i> {blog.author} </h2>
+        </div>
+        <div>
+          <a href={`${blog.url}`}>{blog.url}</a>
+          <div>likes {blog.likes}
+            <button onClick={() => handleLike(blog)}>Like</button>
           </div>
-        )
-      }
-    </div>
-  )
-}
-
-Blog.propTypes={
-  blog:PropTypes.shape({
-    title:PropTypes.string.isRequired,
-    author:PropTypes.string.isRequired,
-    url:PropTypes.string.isRequired,
-  }).isRequired,
-
-  handleLike:PropTypes.func.isRequired,
-  handleRemove: PropTypes.func.isRequired,
-  own:PropTypes.bool.isRequired
-
+          <div>
+         added {blog.user.name}
+          </div>
+          <button onClick={() => handleRemove(blog)}>remove</button>
+        </div>
+      </div>
+    )
+  }
+  return null
 }
 export default Blog
