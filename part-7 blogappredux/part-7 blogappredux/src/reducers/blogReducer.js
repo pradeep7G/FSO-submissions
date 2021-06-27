@@ -1,3 +1,4 @@
+import blogs from '../services/blogs'
 import  blogService from '../services/blogs'
 import { setNotification } from './notificationReducer'
 
@@ -8,6 +9,9 @@ const reducer = (state=[],action) => {
   }
   case 'INIT_BLOGS':{
     return action.data
+  }
+  case 'COMMENT_BLOG':{
+    return state.map(blog => blog.id===action.data.id ? action.data.id :blog)
   }
   default:
     return state
@@ -65,5 +69,21 @@ export const removeBlog = (blogToRemove) => {
     }
   }
 }
+
+export const commentBlog = (blogToComment,comment) => {
+  return async dispatch => {
+    const id=blogToComment.id
+    try{
+      const updatedBlog=await blogService.postComment(id,{ comment })
+      dispatch({
+        type:'COMMENT_BLOG',
+        data:updatedBlog
+      })
+    }catch(e){
+      return Promise.reject()
+    }
+  }
+}
+
 
 export default reducer

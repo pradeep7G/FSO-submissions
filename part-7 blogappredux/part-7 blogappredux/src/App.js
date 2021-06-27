@@ -89,7 +89,7 @@ const App = () => {
   }
 
   return (
-    <>
+    <div className="container">
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
@@ -128,18 +128,18 @@ const App = () => {
           <Login />
         </Route>
         <Route path="/">
-          <div>
-            <Togglable buttonLabel='create new blog' ref={blogFormRef}>
-              <BlogForm  blogFormRef={blogFormRef}/>
-            </Togglable>
-          </div>
           {user
-            ?<BlogList />
+            ?<div>
+              <Togglable buttonLabel='create new blog' ref={blogFormRef}>
+                <BlogForm  blogFormRef={blogFormRef}/>
+              </Togglable>
+              <BlogList />
+            </div>
             :<Login />
           }
         </Route>
       </Switch>
-    </>
+    </div>
   )
 }
 
