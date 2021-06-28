@@ -1,15 +1,15 @@
-/* eslint-disable */
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import userService from '../services/users'
+import { Table } from 'react-bootstrap'
+import { useSelector } from 'react-redux'
 
-const Dispaly =({users}) => {
+const Dispaly =({ users }) => {
   return (
     <div>
-      <table>
+      <Table striped bordered hover>
         <thead>
           <tr>
-            <th></th>
+            <th>user</th>
             <th colSpan="1">blogs created</th>
           </tr>
         </thead>
@@ -17,28 +17,24 @@ const Dispaly =({users}) => {
           {
             users.map(user => {
               return (
-              <tr key={user.id}>
+                <tr key={user.id}>
                   <td> <Link to={`/users/${user.id}`}>{user.name}</Link></td>
                   <td>{user.blogs.length}</td>
-              </tr>
+                </tr>
               )
             })
           }
         </tbody>
-      </table>
+      </Table>
     </div>
   )
 }
 
 const Users = () => {
-  const [users,setUsers]=useState([])
-  useEffect(async ()=>{
-    const response=await userService.getAll()
-    setUsers(response)
-  },[])
+  const users = useSelector(state => state.users)
   return (
     <div>
-      <h2>Users</h2>
+      <h4>Users</h4>
       <Dispaly users={users}/>
     </div>
   )

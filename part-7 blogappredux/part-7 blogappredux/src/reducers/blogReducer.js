@@ -1,17 +1,23 @@
-import blogs from '../services/blogs'
 import  blogService from '../services/blogs'
-import { setNotification } from './notificationReducer'
 
 const reducer = (state=[],action) => {
   switch(action.type) {
-  case 'NEW_BLOG':{
-    return state.concat(action.data)
-  }
   case 'INIT_BLOGS':{
     return action.data
   }
+  case 'NEW_BLOG':{
+    return [...state,action.data]
+  }
+  case 'LIKE_BLOG' :{
+    const likedBlog=action.data
+    return state.map(b => b.id === likedBlog.id ? likedBlog:b)
+  }
+  case 'REMOVE_BLOG' :{
+    const id=action.id
+    return state.filter(b => b.id!==id)
+  }
   case 'COMMENT_BLOG':{
-    return state.map(blog => blog.id===action.data.id ? action.data.id :blog)
+    return state.map(blog => blog.id===action.data.id ? action.data :blog)
   }
   default:
     return state
@@ -43,12 +49,10 @@ export const addBlog = (blog) => {
 export const likeBlog = (LikedBlog) => {
   return async dispatch => {
     try{
-      await blogService.update(LikedBlog)
-      const response = await blogService.getAll()
-      const blogs= response.sort((a,b) => b.likes-a.likes)
+      const updatedBlog=await blogService.update(LikedBlog)
       dispatch({
-        type:'INIT_BLOGS',
-        data:blogs
+        type:'LIKE_BLOG',
+        data:updatedBlog
       })
     }catch(exception){
       console.log(exception)
@@ -56,13 +60,18 @@ export const likeBlog = (LikedBlog) => {
   }
 }
 
+
+
 export const removeBlog = (blogToRemove) => {
   return async dispatch => {
     const ok=window.confirm(`Remove blog ${blogToRemove.title} by ${blogToRemove.author}`)
     if(ok){
       try{
         await blogService.remove(blogToRemove.id)
-        dispatch(initializeBlogs())
+        dispatch({
+          type:'REMOVE_BLOG',
+          data:blogToRemove.id
+        })
       }catch(e){
         console.log(e)
       }
@@ -80,10 +89,9 @@ export const commentBlog = (blogToComment,comment) => {
         data:updatedBlog
       })
     }catch(e){
-      return Promise.reject()
+      return Promise.reject(e)
     }
   }
 }
-
 
 export default reducer

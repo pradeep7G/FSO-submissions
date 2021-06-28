@@ -1,11 +1,11 @@
 import React,{ useState,useEffect } from 'react'
-import uuid from 'react-uuid'
-import { useDispatch } from 'react-redux'
-import { commentBlog, likeBlog,removeBlog } from '../reducers/blogReducer'
-import blogService from '../services/blogs'
 import { useHistory, useParams } from 'react-router-dom'
-import { Button, Form, } from 'react-bootstrap'
+import { useDispatch,useSelector } from 'react-redux'
+import { Button, Form,Container } from 'react-bootstrap'
+import uuid from 'react-uuid'
+import blogService from '../services/blogs'
 import { setNotification } from '../reducers/notificationReducer'
+import { commentBlog, likeBlog,removeBlog } from '../reducers/blogReducer'
 
 const CommentForm = ({ handleComment }) => {
   return (
@@ -25,6 +25,7 @@ const CommentForm = ({ handleComment }) => {
 
 const Blog=() => {
   const [blog,setBlog]=useState(null)
+  const user=useSelector(state => state.user)
   const dispatch = useDispatch()
   const history=useHistory()
   const id=useParams().id
@@ -75,6 +76,7 @@ const Blog=() => {
 
   if(blog)
   {
+    const own = user && user.username === blog.user.username
     return (
       <div className='blog'>
         <div>
@@ -88,7 +90,10 @@ const Blog=() => {
           <div>
           added by {blog.user.name}
           </div>
-          <Button className="m-1" variant="primary" onClick={() => handleRemove(blog)}>remove</Button>
+          {
+            own &&
+            <Button className="m-1" variant="primary" onClick={() => handleRemove(blog)}>remove</Button>
+          }
         </div>
         <CommentForm handleComment={handleComment}/>
         {blog.comments.length!==0 && <h4>comments</h4>}

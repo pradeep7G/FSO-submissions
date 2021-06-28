@@ -2,6 +2,8 @@
 import { setNotification } from './notificationReducer'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
+import Storage from '../utils/storage'
+
 const reducer = (state=null,action) => {
   switch(action.type) {
     case 'LOGIN' : {
@@ -40,7 +42,7 @@ export const userLogin = (username,password) => {
 
 export const userLogout = () => {
   return dispatch => {
-    localStorage.clear()
+    Storage.logoutUser()
     dispatch({
       type:'LOGOUT',
     })
