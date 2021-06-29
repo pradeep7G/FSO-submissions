@@ -5,8 +5,7 @@ const jwt =require('jsonwebtoken')
 blogsRouter.get('/',async (req, res,next) => {
   const blogs=await Blog
                 .find({})
-                .populate('user',{username:1,name:1})//populate('user',{username:1,name:1}) for selective population
-    console.log(blogs)
+                .populate('user',{username:1,name:1})//populate('user',{username:1,name:1}) for selective population)
     res.json(blogs)
   }
 )
@@ -24,6 +23,20 @@ blogsRouter.get('/:id',async (req, res,next) => {
   }
 }
 )
+
+// blogsRouter.get('/blogs/:id',async (req, res,next) => {
+//   const response=await Blog
+//                         .findById(req.params.id)
+//                         .populate('user',{username:1,name:1})
+//   if(response)
+//   {
+//     res.status(200).send(response.toJSON())
+//   }
+//   else{
+//     res.status(404).end()
+//   }
+// }
+// )
 
 blogsRouter.post('/:id/comments',async (req,res,next) => {
   const id=req.params.id
