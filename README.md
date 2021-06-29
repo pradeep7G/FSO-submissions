@@ -1,1 +1,1 @@
-# FSO-submissions
+# FullStackOpen-submissions
